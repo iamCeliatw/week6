@@ -28,12 +28,14 @@ def signup():
     # 使用cursor方法建立指標對象
     mycursor = mydb.cursor()
     # 使用execute執行SQL檢查是否有相同名字
-    mycursor.execute('SELECT * FROM member WHERE name = %s', [name])
+    mycursor.execute('SELECT * FROM member WHERE username = %s', [account])
     # 取到一筆相同的資料放進變數user
     user = mycursor.fetchone()
     if user != None:
         return redirect("/error?message=帳號已經被註冊")
-    #把資料放進資料庫
+    elif name == "" or account == "" or password == "":
+        return redirect("/error?message=請輸入完整資訊")
+    # 把資料放進資料庫
     sql = "INSERT INTO member (name, username, password) VALUES (%s, %s, %s)"
     mycursor.execute(sql, [name, account, password])
     mydb.commit()
