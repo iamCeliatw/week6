@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css')}}">
+    <script type="text/javascript" src="{{url_for('static', filename='styles/app.js')}}"></script>
+  </head>
+  <body>
+    <header class="head">
+      <div class="welcome">歡迎光臨，請註冊登入系統</div>
+    </header>
+    <section>
+       <div class="type-page">
+        <div class="title">註冊系統</div>
+        <form action="/signup" method="POST">
+            <div class="type-place">
+            <span> 姓名 </span>
+            <input type="text" name="name" />
+          </div>
+          <div class="type-place">
+            <span> 帳號 </span>
+            <input type="text" name="account" />
+          </div>
+          <div class="type-place">
+            <span> 密碼 </span>
+            <input type="password" name="password"/>
+          </div>
+          <div>
+            <button class="btn">註冊</button>
+          </div>
+        </form>
+      </div>
+
+      <hr/>
+      <div class="type-page">
+        <div class="title">登入系統</div>
+        <form action="/signin" method="POST">
+          <div class="type-place">
+            <span> 帳號 </span>
+            <input type="text" name="account" />
+          </div>
+          <div class="type-place">
+            <span> 密碼 </span>
+            <input type="password" name="password"/>
+          </div>
+          <div>
+            <button class="btn">登入</button>
+          </div>
+        </form>
+      </div>
+<!--      <div class="type-page">-->
+<!--        <div class="title">計算正整數的平方</div>-->
+<!--          <div class="type-place">-->
+<!--            <span>正整數</span>-->
+<!--            <input type="text" name="number" id="number"/>-->
+<!--          </div>-->
+<!--          <div>-->
+<!--            <button type='submit' class="btn" onclick="redirect()">計算</button>-->
+<!--          </div>-->
+<!--      </div>-->
+    </section>
+  </body>
+</html>

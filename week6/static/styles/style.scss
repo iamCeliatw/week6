@@ -1,0 +1,51 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Times New Roman", Times, serif;
+}
+header {
+  height: 180px;
+  background-color: rgb(109, 150, 188);
+  .welcome {
+    line-height: 180px;
+    text-align: center;
+    font-size: 40px;
+    color: whitesmoke;
+  }
+}
+
+.type-page {
+  width: auto;
+  text-align: center;
+  margin: 100px;
+  line-height: 30px;
+  //   font-size: 20px;
+  .title {
+    font-size: 30px;
+    margin-bottom: 20px;
+  }
+  .type-place {
+    span {
+      font-size: 20px;
+      margin-right: 5px;
+    }
+    input {
+      width: 300px;
+      padding: 8px;
+      margin: 8px 0px;
+      box-sizing: border-box;
+    }
+  }
+  .btn {
+    margin-top: 20px;
+    width: 100px;
+    font-size: 20px;
+  }
+  .btn:hover {
+    cursor: pointer;
+  }
+}
+.result_p {
+  font-size: 30px;
+}
