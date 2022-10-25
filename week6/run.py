@@ -13,7 +13,7 @@ app.secret_key= "fjehiwqdmkdn313"
 mydb = mysql.connector.connect(
     host='localhost',
     user='root',
-    password='asd24680',
+    password='',
     database='website')
 @app.route("/",methods=["GET", "POST"])
 def index():
