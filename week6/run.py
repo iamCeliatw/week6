@@ -15,6 +15,30 @@ mydb = mysql.connector.connect(
     user='root',
     password='',
     database='website')
+
+def select1(sql,val):
+    # 使用cursor方法建立指標對象
+    mycursor = mydb.cursor()
+    mycursor.execute(sql,val)
+    data = mycursor.fetchone()
+    return data
+
+def sql_execute(sql, val):
+    mycursor = mydb.cursor()
+    mycursor.execute(sql, val)
+    mydb.commit()
+
+def selectall(sql, val=''):
+    mycursor = mydb.cursor()
+    mycursor.execute(sql, val)
+    data = mycursor.fetchall()
+    if data:
+        return data
+    else:
+        return res
+
+
+
 @app.route("/",methods=["GET", "POST"])
 def index():
     return render_template("index2.html")
@@ -25,34 +49,34 @@ def signup():
     name = request.form['name']
     account = request.form['account']
     password = request.form['password']
-    # 使用cursor方法建立指標對象
-    mycursor = mydb.cursor()
-    # 使用execute執行SQL檢查是否有相同名字
-    mycursor.execute('SELECT * FROM member WHERE username = %s', [account])
-    # 取到一筆相同的資料放進變數user
-    user = mycursor.fetchone()
+    sql = 'SELECT * FROM member WHERE username = %s'
+    val = [account]
+    user = select1(sql, val)
     if user != None:
         return redirect("/error?message=帳號已經被註冊")
     elif name == "" or account == "" or password == "":
         return redirect("/error?message=請輸入完整資訊")
     # 把資料放進資料庫
     sql = "INSERT INTO member (name, username, password) VALUES (%s, %s, %s)"
-    mycursor.execute(sql, [name, account, password])
-    mydb.commit()
+    val = [name, account, password]
+    sql_execute(sql, val)
     return redirect('/')
 
 # 驗證系統路由 使用POST
 @app.route("/signin", methods=["POST"])
 def signin():
+    account = ''
+    password = ''
     if 'account' in request.form and 'password' in request.form:
         account = request.form['account']
         password = request.form['password']
-    mycursor = mydb.cursor()
+    # mycursor = mydb.cursor()
     # 使用execute執行SQL檢查是否有相同名字
-    mycursor.execute('SELECT * FROM member WHERE username = %s AND password = %s', (account, password))
-    user = mycursor.fetchone()
+    val = [account, password]
+    sql = 'SELECT * FROM member WHERE username = %s AND password = %s'
+    user = select1(sql, val)
     if user:
-        session['loggedin'] = True
+        session['login'] = True
         session['id'] = user[0]
         session['name'] = user[1]
         session['act'] = user[2]
@@ -63,25 +87,49 @@ def signin():
     else:
         return redirect("/error?message=帳號、或密碼輸入錯誤")
 
-#成功登入頁
+
+# 成功登入頁
 @app.route("/member")
 def member():
     if 'act' in session and 'pwd' in session:
-        return render_template("success.html", username=session['name'])
+        sql = 'select * from message order by time DESC'
+        res1 = selectall(sql)
+        print(res1)
+        return render_template("success.html", username=session['name'], data=res1)
     else:
         return redirect("/")
 
-#失敗登入頁
+@app.route("/message", methods=['POST'])
+def message():
+    if 'message' in request.form:
+        mes = request.form['message']
+        member_id = session['id']
+        name = session['name']
+        sql = "INSERT INTO message (member_id,name, content) VALUES (%s, %s, %s)"
+        val = [member_id, name, mes]
+        sql_execute(sql, val)
+        return redirect('/member')
+    else:
+        return redirect("/error?message=請輸入文字")
+
+
+
+
+
+
+# 失敗登入頁
 @app.route("/error")
 def error():
     data = request.args.get('message', '發生錯誤')
     return render_template("error.html", data=data)
 
-#成功登出頁
+
+# 成功登出頁
 @app.route("/signout")
 def signout():
     session.clear()
     return redirect("/")
+
 
 if __name__ == '__main__':
     app.run(port=3000, debug=True)

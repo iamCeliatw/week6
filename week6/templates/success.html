@@ -5,23 +5,47 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='styles/style.css') }}"
+    />
   </head>
+
   <body>
     <header class="head">
       <div class="welcome">歡迎光臨，這是會員頁面</div>
     </header>
+
     <section>
       <div class="type-page">
         <form action="/signout">
-        <div class="title"> Hello {{ username }}, 歡迎登入此網站!
-</body>
-</html></div>
+          <div class="title">Hello {{ username }}, 歡迎登入此網站!</div>
           <div>
             <button class="btn">登出系統</button>
           </div>
         </form>
       </div>
+        <hr/>
+      <div class="type-page">
+        <form action="/message" method="POST">
+         <div class="type-place">
+           <div class="title">快來留言吧!</div>
+           <span> 內容 </span>
+           <input type="text" name="message" />
+          </div>
+          <div>
+            <button class="btn">送出</button>
+          </div>
+        </form>
+      </div>
+          <hr/>
+      <ul class="type-page" >
+      {% for i in data %}
+          <li>{{ i[2] }}: {{ i[3] }}</li>
+      {% endfor %}
+      </ul>
     </section>
+
   </body>
 </html>

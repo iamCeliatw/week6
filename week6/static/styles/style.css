@@ -5,6 +5,15 @@
   font-family: "Times New Roman", Times, serif;
 }
 
+ul {
+  list-style: none;
+}
+li {
+  font-size: 20px;
+  padding: 10px;
+  color: rgb(85, 137, 200);
+}
+
 header {
   height: 180px;
   background-color: rgb(109, 150, 188);
