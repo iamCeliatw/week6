@@ -12,13 +12,14 @@ app = Flask(
 app.secret_key= "fjehiwqdmkdn313"
 # connect sql
 
-
+# 連接資料庫
 mydb = mysql.connector.connect(
     host='localhost',
     user='root',
     password=MySQLPassword(),
     database='website')
 
+# 把資料庫連接常用指令做成Function
 def select1(sql,val):
     # 使用cursor方法建立指標對象
     mycursor = mydb.cursor()
@@ -97,7 +98,7 @@ def member():
     else:
         return redirect("/")
 
-
+# 驗證訊息框內容是否為空
 @app.route("/message", methods=['POST'])
 def message():
     data = request.form.to_dict()
