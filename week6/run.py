@@ -1,5 +1,6 @@
 from flask import *
 import mysql.connector
+from mySQL import MySQLPassword
 
 app = Flask(
     __name__,
@@ -10,16 +11,18 @@ app = Flask(
 #設定session 密鑰
 app.secret_key= "fjehiwqdmkdn313"
 # connect sql
+
+
 mydb = mysql.connector.connect(
     host='localhost',
     user='root',
-    password='',
+    password=MySQLPassword(),
     database='website')
 
 def select1(sql,val):
     # 使用cursor方法建立指標對象
     mycursor = mydb.cursor()
-    mycursor.execute(sql,val)
+    mycursor.execute(sql, val)
     data = mycursor.fetchone()
     return data
 
@@ -32,11 +35,7 @@ def selectall(sql, val=''):
     mycursor = mydb.cursor()
     mycursor.execute(sql, val)
     data = mycursor.fetchall()
-    if data:
-        return data
-    else:
-        return res
-
+    return data
 
 
 @app.route("/",methods=["GET", "POST"])
@@ -62,6 +61,7 @@ def signup():
     sql_execute(sql, val)
     return redirect('/')
 
+
 # 驗證系統路由 使用POST
 @app.route("/signin", methods=["POST"])
 def signin():
@@ -70,7 +70,6 @@ def signin():
     if 'account' in request.form and 'password' in request.form:
         account = request.form['account']
         password = request.form['password']
-    # mycursor = mydb.cursor()
     # 使用execute執行SQL檢查是否有相同名字
     val = [account, password]
     sql = 'SELECT * FROM member WHERE username = %s AND password = %s'
@@ -93,28 +92,24 @@ def signin():
 def member():
     if 'act' in session and 'pwd' in session:
         sql = 'select * from message order by time DESC'
-        res1 = selectall(sql)
-        print(res1)
-        return render_template("success.html", username=session['name'], data=res1)
+        res = selectall(sql)
+        return render_template("success.html", username=session['name'], data=res)
     else:
         return redirect("/")
 
+
 @app.route("/message", methods=['POST'])
 def message():
-    if 'message' in request.form:
-        mes = request.form['message']
-        member_id = session['id']
-        name = session['name']
-        sql = "INSERT INTO message (member_id,name, content) VALUES (%s, %s, %s)"
-        val = [member_id, name, mes]
+    data = request.form.to_dict()
+    member_id = session['id']
+    name = session['name']
+    if data['message'] != '':
+        sql = "INSERT INTO message(member_id,name, content) VALUES (%s, %s, %s)"
+        val = [member_id, name, data['message']]
         sql_execute(sql, val)
         return redirect('/member')
     else:
         return redirect("/error?message=請輸入文字")
-
-
-
-
 
 
 # 失敗登入頁
